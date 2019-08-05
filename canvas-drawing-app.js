@@ -48,13 +48,15 @@ function computeAllMatches() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.font = "20px Arial";
     context.fillStyle = colorGreen;
+    context.textAlign = "center";
     if (character_file_ready) {
         for (var i = 0; i < character_array.length; i++) {
             for (var j = 0; j < character_array[i].length; j++) {
-                context.fillText(character_array[i][j], 50 + j * 20, 50 + i * 20);
+                context.fillText(character_array[i][j], 50 + j * 20 + 10, 50 + i * 20);
             }
         }
     }
+    context.textAlign = "left";
     if (word_file_ready) {
         var x = 50;
         var y = 870;
@@ -133,6 +135,7 @@ function redrawWord(selected, color) {
             selected_text = selected_text + word_array[selected][i];
         }
     }
+    context.textAlign = "left";
     context.fillText(selected_text,
         word_coordinates[selected][0],
         word_coordinates[selected][1] + word_coordinates[selected][3]);
@@ -142,9 +145,9 @@ function redrawWord(selected, color) {
         (selected_text.length - 1);
     var x = word_locations[selected][0];
     var y = word_locations[selected][1];
+    context.textAlign = "center";
     for (var i = 0; i < selected_text.length; i++) {
-        context.clearRect(50 + x * 20, 50 + y * 20 - 20, 20, 20);
-        context.fillText(selected_text[i], 50 + x * 20, 50 + y * 20);
+        context.fillText(selected_text[i], 50 + x * 20 + 10, 50 + y * 20);
         x = x + dx;
         y = y + dy;
     }
