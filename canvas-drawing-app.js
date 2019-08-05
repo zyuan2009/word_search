@@ -80,6 +80,32 @@ function computeAllMatches() {
     }
 }
 
+function loadServerWordFile() {
+    var client = new XMLHttpRequest();
+    client.open('GET', 'https://zyuan2009.github.io/word_search/words.txt');
+    client.onreadystatechange = function() {
+        var word_file_content = client.responseText;
+        word_array_lines = word_file_content.split("\n");
+        word_array_lines.filter(function(s){
+            return s.length > 0;
+        });
+        word_array = [];
+        word_array_lines.forEach(function(element, index, array){
+            var sub_word_array = element.split(",");
+            word_array = word_array.concat(sub_word_array);
+        });
+        word_array = word_array.map(function(s){
+            return s.trim();
+        });
+        word_array = word_array.filter(function(s){
+            return s.length > 0;
+        });
+        word_file_ready = true;
+        computeAllMatches();
+    }
+    client.send();
+}
+
 function handleWordFileSelect(evt) {
     var word_file_name = document.getElementById("word_file_name").files[0];
     var reader = new FileReader();
@@ -104,6 +130,22 @@ function handleWordFileSelect(evt) {
         computeAllMatches();
     };
     reader.readAsText(word_file_name);
+}
+
+function loadServerCharFile() {
+    var client = new XMLHttpRequest();
+    client.open('GET', 'https://zyuan2009.github.io/word_search/chars.txt');
+    client.onreadystatechange = function() {
+        var character_file_content = client.responseText;
+        character_array = character_file_content.split("\n");
+        character_array = character_array.filter(function(s){
+            return s.length > 0;
+        });
+        
+        character_file_ready = true;
+        computeAllMatches();
+    };
+    client.send();
 }
 
 function handleCharacterFileSelect(evt) {
@@ -196,20 +238,23 @@ function prepareCanvas()
       alert('The File APIs are not fully supported in this browser.');
     }
 
+    loadServerCharFile();
+    loadServerWordFile();
+
     document.getElementById('character_file_name').addEventListener('change', handleCharacterFileSelect, false);
     document.getElementById('word_file_name').addEventListener('change', handleWordFileSelect, false);
 
-	var canvasDiv = document.getElementById('canvasDiv');
-	canvas = document.createElement('canvas');
-	canvas.setAttribute('width', canvasWidth);
-	canvas.setAttribute('height', canvasHeight);
-	canvas.setAttribute('id', 'canvas');
-	canvasDiv.appendChild(canvas);
-	if(typeof G_vmlCanvasManager != 'undefined') {
-		canvas = G_vmlCanvasManager.initElement(canvas);
-	}
+    var canvasDiv = document.getElementById('canvasDiv');
+    canvas = document.createElement('canvas');
+    canvas.setAttribute('width', canvasWidth);
+    canvas.setAttribute('height', canvasHeight);
+    canvas.setAttribute('id', 'canvas');
+    canvasDiv.appendChild(canvas);
+    if (typeof G_vmlCanvasManager != 'undefined') {
+        canvas = G_vmlCanvasManager.initElement(canvas);
+    }
     context = canvas.getContext("2d"); // Grab the 2d canvas context
     context.font = "12px Arial";
 
-	$('#canvas').mousemove(handleMouseMove);
+    $('#canvas').mousemove(handleMouseMove);
 }
