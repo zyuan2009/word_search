@@ -82,7 +82,8 @@ function computeAllMatches() {
 
 function loadServerWordFile() {
     var client = new XMLHttpRequest();
-    client.open('GET', 'https://zyuan2009.github.io/word_search/words.txt');
+    var url_dir = document.URL.substr(0,document.URL.lastIndexOf('/'));
+    client.open('GET', url_dir + '/words.txt');
     client.onreadystatechange = function() {
         var word_file_content = client.responseText;
         word_array_lines = word_file_content.split("\n");
@@ -134,7 +135,8 @@ function handleWordFileSelect(evt) {
 
 function loadServerCharFile() {
     var client = new XMLHttpRequest();
-    client.open('GET', 'https://zyuan2009.github.io/word_search/chars.txt');
+    var url_dir = document.URL.substr(0,document.URL.lastIndexOf('/'));
+    client.open('GET', url_dir + '/chars.txt');
     client.onreadystatechange = function() {
         var character_file_content = client.responseText;
         character_array = character_file_content.split("\n");
